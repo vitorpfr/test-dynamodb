@@ -1,4 +1,4 @@
-package enhanced.entities
+package ddbenhancedclient.entities
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
@@ -7,10 +7,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 import java.util.UUID
 
 @DynamoDbBean
-class Order constructor(
+class OrderEntity constructor(
     orderId: UUID = UUID.randomUUID(),
     orderCustomerName: String? = null,
-    orderItems: List<OrderItem> = emptyList()
 ) {
     @get:DynamoDbPartitionKey
     @get:DynamoDbAttribute("PK")
@@ -26,18 +25,14 @@ class Order constructor(
     @get:DynamoDbAttribute("orderCustomerName")
     var orderCustomerName: String?
 
-    // not mapped because it is not a DynamoDB attribute
-    var orderItems: List<OrderItem>
-
     init {
         this.orderId = orderId
         this.orderCustomerName = orderCustomerName
-        this.orderItems = orderItems
     }
 
     fun toPk(id: UUID) = "OR#${id}"
     fun toSk(id: UUID) = "OR#${id}"
     override fun toString(): String {
-        return "Order(partitionKey='$partitionKey', sortKey='$sortKey', orderId=$orderId, orderCustomerName=$orderCustomerName, orderItems=$orderItems)"
+        return "Order(partitionKey='$partitionKey', sortKey='$sortKey', orderId=$orderId, orderCustomerName=$orderCustomerName)"
     }
 }
